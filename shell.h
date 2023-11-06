@@ -27,6 +27,11 @@ int custom_atoi(char *s)
 void display_prompt(void)
 void command_exec(char *cmd)
 void read_cmd(char *cmd, size_t size)
+int unset_alias_by_name(info_t *info, char *alias_name)
+int add_alias(info_t *info, char *str)
+int display_history(info_t *info)
+int handle_alias(info_t *info)
+int print_alias_entry(list_t *node)
 
 
 #endif

@@ -1,16 +1,22 @@
 #include "_shell.h"
 
-/**
- * _print - print a string
- * str: input string
- *
- * Return: always void
- */
-void _print(char *str)
-{
-        write(STDOUT_FILENO, str, strlen(str));
-}
+#include <unistd.h>
 
+/**
+ * _print - print a string to the standard output
+ * @str: input string
+ */
+void _print(const char *str)
+{
+    size_t len = 0;
+    const char *p = str;
+
+    while (*p++)
+        len++;
+
+    write(STDOUT_FILENO, str, len);
+
+}
 /**
  * tokenize_cmd - tokenize a command
  * @cmd: command to tokenize
@@ -19,43 +25,58 @@ void _print(char *str)
  *
  * Return: the array of tokens
  */
-char **tokenize_cmd(char *cmd, char *delim, int *num_tokens)
+char **tokenize_cmd(const char *cmd, const char *delim, int *num_tokens)
 {
-        char **tokens;
-        char *token;
-        int i, max_tokens;
+    const char *cmd_ptr = cmd;
+    char **tokens = NULL;
+    char *token;
+    int max_tokens = 10; // Initial estimation
+    int i = 0;
 
-        max_tokens = _strlen(cmd) / 2 + 1;
-        tokens = malloc(max_tokens * sizeof(char *));
-        i = 0;
-        token = strtok(cmd, delim);
+    tokens = malloc(max_tokens * sizeof(char *));
+    if (!tokens) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
 
-        while (token != NULL && i < max_tokens)
-        {
-                tokens[i] = malloc((strlen(token) + 1) * sizeof(char));
-                strcpy(tokens[i], token);
-                i++;
-                token = strtok(NULL, delim);
+    token = strtok((char *)cmd_ptr, delim);
+    while (token != NULL) {
+        if (i == max_tokens - 1) {
+            max_tokens *= 2;
+            tokens = realloc(tokens, max_tokens * sizeof(char *));
+            if (!tokens) {
+                perror("realloc");
+                exit(EXIT_FAILURE);
+            }
         }
-        tokens[i] = NULL;
-        *num_tokens = i;
-        return tokens;
+
+        tokens[i] = strdup(token);
+        if (!tokens[i]) {
+            perror("strdup");
+            exit(EXIT_FAILURE);
+        }
+        i++;
+        token = strtok(NULL, delim);
+    }
+    tokens[i] = NULL;
+    *num_tokens = i;
+    return tokens;
 }
 
-/*
+/**
  * _strlen - compute the size of a string
  * @str: input string
  *
  * Return: length of the str
  */
-int _strlen(char *str)
+int _strlen(const char *str)
 {
-        int len;
+    int len = 0;
 
-        len = 0;
-        while (str[len] != '\0')
-        {
-                len++;
-        }
-        return len;
+    while (str[len] != '\0')
+    {
+        len++;
+    }
+    return len;
 }
+

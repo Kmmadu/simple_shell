@@ -1,4 +1,5 @@
 #include "_shell.h"
+
 /**
  * main - entry point
  *
@@ -6,13 +7,14 @@
  */
 int main(void)
 {
-        while (1)
-        {
-                char cmd[128];
+	while (1)
+	{
+		char cmd[128];
 
-                display_prompt();
-                read_cmd(cmd, sizeof(cmd));
-                command_exec(cmd);
-        }
-        return (0);
+		display_prompt();
+		read_cmd(cmd, sizeof(cmd));
+		command_exec(cmd);
+	}
+	return (0);
 }
+

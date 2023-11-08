@@ -32,6 +32,9 @@ int add_alias(info_t *info, char *str)
 int display_history(info_t *info)
 int handle_alias(info_t *info)
 int print_alias_entry(list_t *node)
+int main_shell_loop(info_t *info, char **av)
+int find_builtin_command(info_t *info)
+void find_external_command(info_t *info)
 
 
 #endif

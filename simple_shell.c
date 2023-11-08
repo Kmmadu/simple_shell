@@ -1,11 +1,11 @@
-#include "_shell.h"
+#include "shell.h"
 
 /**
  * display_prompt - Display the regular prompt message.
  */
 void display_prompt(void)
 {
-	_print("cisfun$ ");
+	printf("cisfun$ ");
 }
 
 /**
@@ -52,12 +52,12 @@ void read_cmd(char *cmd, size_t size)
 	{
 		if (feof(stdin))
 		{
-			_print("\n");
+			printf("\n");
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
-			_print("Error while reading input.\n");
+			printf("Error while reading input.\n");
 			exit(EXIT_FAILURE);
 		}
 	}

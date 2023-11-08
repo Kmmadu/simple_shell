@@ -1,21 +1,19 @@
 #include "shell.h"
+#include <string.h>
 
 /**
- * unset_alias_by_name - Unsets an alias by its name.
- * @info: Structure containing potential arguments.
- * @alias_name: The name of the alias to unset.
+ * unset_alias_by_name - Unset an alias by its name
+ * @info: A pointer to the info_t struct
+ * @alias_name: The name of the alias
  *
- * This function unsets an alias identified by its name.
- * in the alias list, and if found, removes it from the list.
- *
- * Return: 0 on success, 1 on error.
+ * Return: 1 on failure, 0 on success
  */
 int unset_alias_by_name(info_t *info, char *alias_name)
 {
 	char *equal_sign, tmp_char;
 	int result = 1;
 
-	equal_sign = _strchr(alias_name, '=');
+	equal_sign = strchr(alias_name, '=');
 
 	if (equal_sign)
 	{
@@ -36,21 +34,18 @@ int unset_alias_by_name(info_t *info, char *alias_name)
 }
 
 /**
- * add_alias - Add an alias to the list
- * @info: Parameter struct
- * @str: The alias string in the format "name=value"
+ * add_alias - Add or update an alias
+ * @info: A pointer to the info_t struct
+ * @str: The alias string to add
  *
- * This function adds an alias identified
- * It checks if the input string is a valid
- *
- * Return: 0 on success, 1 on error.
+ * Return: 1 on failure, 0 on success
  */
 int add_alias(info_t *info, char *str)
 {
 	char *equal_sign, tmp_char;
 	int result = 1;
 
-	equal_sign = _strchr(str, '=');
+	equal_sign = strchr(str, '=');
 
 	if (equal_sign)
 	{
@@ -71,10 +66,10 @@ int add_alias(info_t *info, char *str)
 }
 
 /**
- * display_history - Displays the command history, showing each command with
- *                   its line number, starting at 0.
- * @info: Structure containing potential arguments.
- * Return: Always 0
+ * display_history - Display the command history
+ * @info: A pointer to the info_t struct
+ *
+ * Return: Always returns 0
  */
 int display_history(info_t *info)
 {
@@ -82,21 +77,18 @@ int display_history(info_t *info)
 	list_t *node = info->history;
 
 	for (line_number = 0; node; node = node->next, line_number++)
+	{
 		printf("%d %s\n", line_number, node->str);
+	}
 
 	return (0);
 }
 
 /**
- * handle_alias - Handle alias commands,
- * @info: Structure containing potential arguments.
+ * handle_alias - Handle alias commands
+ * @info: A pointer to the info_t struct
  *
- * This function handles alias commands.
- * if called without arguments,
- * or prints the corresponding
- * not in 'name=value' format.
- *
- * Return: Always 0.
+ * Return: Always returns 0
  */
 int handle_alias(info_t *info)
 {
@@ -113,9 +105,10 @@ int handle_alias(info_t *info)
 		}
 		return (0);
 	}
+
 	for (i = 1; info->argv[i]; i++)
 	{
-		char *p = _strchr(info->argv[i], '=');
+		char *p = strchr(info->argv[i], '=');
 
 		if (p)
 			set_alias_entry(info, info->argv[i]);
@@ -127,18 +120,16 @@ int handle_alias(info_t *info)
 }
 
 /**
- * print_alias_entry - Print an alias name and its value.
- * @node: The alias node to be printed.
+ * print_alias_entry - Print an alias entry
+ * @node: A pointer to the list node containing the alias
  *
- * This function prints the name and value of the provided alias node.
- *
- * Return: 0 on success, 1 on error
+ * Return: 0 on success, 1 on failure
  */
 int print_alias_entry(list_t *node)
 {
 	if (node)
 	{
-		char *equal_sign = _strchr(node->str, '=');
+		char *equal_sign = strchr(node->str, '=');
 
 		if (equal_sign)
 		{

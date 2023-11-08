@@ -1,4 +1,10 @@
 #include "shell.h"
+#include <stdio.h>
+
+int main(void)
+{
+return (0);
+}
 
 /**
  * display_prompt - Display the regular prompt message.

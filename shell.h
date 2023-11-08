@@ -12,7 +12,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
-
 /* Constants for buffer sizes and command chaining */
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
@@ -93,6 +92,8 @@ int print_alias_entry(list_t *node);
 int main_shell_loop(info_t *info, char **av);
 int find_builtin_command(info_t *info);
 void find_external_command(info_t *info);
+void _putchar(char c);
+void _puts(char *str);
 
 #endif
 

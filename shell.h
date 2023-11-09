@@ -71,6 +71,7 @@ typedef struct builtin
 } builtin_table;
 
 /* Function Declarations */
+
 int show_help(info_t *info);
 int change_directory(info_t *info);
 int exit_shell(info_t *info);

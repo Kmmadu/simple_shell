@@ -1,11 +1,6 @@
 #include "shell.h"
 #include <stdio.h>
 
-int main(void)
-{
-return (0);
-}
-
 /**
  * display_prompt - Display the regular prompt message.
  */
@@ -34,7 +29,6 @@ void command_exec(char *cmd)
 	}
 	else if (cmd_pid == 0)
 	{
-		/* Command process execution */
 		tokens = tokenize_cmd(cmd, " ", &token_count);
 		execve(tokens[0], tokens, NULL);
 		perror("./shell");
@@ -42,7 +36,6 @@ void command_exec(char *cmd)
 	}
 	else
 	{
-		/* Parent process execution */
 		wait(NULL);
 	}
 }
@@ -67,6 +60,6 @@ void read_cmd(char *cmd, size_t size)
 			exit(EXIT_FAILURE);
 		}
 	}
-	cmd[strcspn(cmd, "\n")] = '\0'; /* Remove the new line character */
+	cmd[strcspn(cmd, "\n")] = '\0';
 }
 

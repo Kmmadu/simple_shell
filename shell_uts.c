@@ -2,24 +2,6 @@
 #include <stdio.h>
 
 /**
- * check_interactive - Check if the shell is running in interactive mode.
- * @info: Pointer to the shell's info structure.
- *
- * Return: 1 if in interactive mode, 0 otherwise.
- */
-int check_interactive(info_t *info)
-{
-	return (isatty(STDIN_FILENO) && info->readfd <= 2);
-}
-
-int main(void)
-{
-printf("Hello from shell_uts!\n");
-return (0);
-}
-
-
-/**
  * is_delimiter - Check if a character is a delimiter.
  * @c: The character to check.
  * @delim: The delimiter string.

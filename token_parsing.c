@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <stdlib.h>
 
 /**
  * is_delim - Check if a character is a delimiter.
@@ -9,122 +10,116 @@
  */
 int is_delim(char c, char *delim)
 {
-    while (*delim)
-    {
-	    if (c == *delim)
-		    return (1);
-	    delim++;
-    }
-    return (0);
-}
-
-/**
- * strtow - Split a string into words using multiple delimiters.
- * @str: The input string to be split.
- * @d: The delimiter string containing all possible delimiters.
- *
- * Return: A pointer to an array of strings, or NULL on failure.
- */
-char **strtow(char *str, char *d)
-{
-	int i, j, k, m, numwords = 0;
-	char **s;
-
-	if (str == NULL || str[0] == '\0')
-		return (NULL);
-
-	if (!d)
-		d = " ";
-
-	for (i = 0; str[i] != '\0'; i++)
-		if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
-			numwords++;
-
-	if (numwords == 0)
-		return (NULL);
-
-	s = malloc((1 + numwords) * sizeof(char *));
-	if (!s)
-		return (NULL);
-
-	for (i = 0, j = 0; j < numwords; j++)
+	while (*delim)
 	{
-		while (is_delim(str[i], d))
-			i++;
-
-		k = 0;
-		while (!is_delim(str[i + k], d) && str[i + k])
-			k++;
-
-		s[j] = malloc((k + 1) * sizeof(char));
-		if (!s[j])
-		{
-			for (k = 0; k < j; k++)
-				free(s[k]);
-			free(s);
-			return (NULL);
-		}
-
-		for (m = 0; m < k; m++)
-			s[j][m] = str[i++];
-		s[j][m] = '\0';
+		if (c == *delim)
+			return (1);
+		delim++;
 	}
-
-	s[j] = NULL;
-	return (s);
+	return (0);
 }
 
 /**
- * strtow2 - Split a string into words using a single delimiter.
+ * customStringSplit - Split a string into words using a single delimiter.
  * @str: The input string to be split.
  * @d: The delimiter character.
  *
  * Return: A pointer to an array of strings, or NULL on failure.
  */
-char **strtow2(char *str, char d)
+char **customStringSplit(char *str, char d)
 {
-	int i, j, k, m, numwords = 0;
+	int i, j, k, numwords = 0, m;
 	char **s;
 
 	if (str == NULL || str[0] == '\0')
 		return (NULL);
 
 	for (i = 0; str[i] != '\0'; i++)
-		if ((str[i] != d && str[i + 1] == d) ||
-		    (str[i] != d && !str[i + 1]) || str[i + 1] == d)
+	{
+		if (str[i] != d && (str[i + 1] == d || str[i + 1] == '\0'))
 			numwords++;
+	}
 
 	if (numwords == 0)
 		return (NULL);
-
-	s = malloc((1 + numwords) * sizeof(char *));
+	s = malloc((numwords + 1) * sizeof(char *));
 	if (!s)
 		return (NULL);
-
 	for (i = 0, j = 0; j < numwords; j++)
 	{
-		while (str[i] == d && str[i] != d)
+		while (str[i] == d)
 			i++;
-
 		k = 0;
-		while (str[i + k] != d && str[i + k] && str[i + k] != d)
+		while (str[i + k] != d && str[i + k] != '\0')
 			k++;
-
 		s[j] = malloc((k + 1) * sizeof(char));
 		if (!s[j])
 		{
-			for (k = 0; k < j; k++)
-				free(s[k]);
+			for (m = 0; m < j; m++)
+				free(s[m]);
 			free(s);
 			return (NULL);
 		}
 
 		for (m = 0; m < k; m++)
 			s[j][m] = str[i++];
-		s[j][m] = '\0';
+		s[j][k] = '\0';
 	}
+	s[numwords] = NULL;
+	return (s);
+}
 
-	s[j] = NULL;
+/**
+ * customStringSplitWithDelimiters - Split a string into
+ * words using specified delimiters.
+ * @str: The input string to be split.
+ * @d: The delimiter string containing all possible delimiters.
+ *
+ * Return: A dynamically allocated array of strings, each representing a word
+ *         from the input string. Returns NULL on failure or when no words are
+ *         found.
+ */
+char **customStringSplitWithDelimiters(char *str, char *d)
+{
+	int numwords = 0, i, k, m, j;
+	char **s;
+
+	if (str == NULL || str[0] == '\0')
+		return (NULL);
+	if (!d)
+		d = " ";
+
+	for (i = 0; str[i] != '\0';)
+	{
+		while (is_delim(str[i], d))
+			i++;
+		if (str[i] != '\0')
+			numwords++;
+		while (str[i] && !is_delim(str[i], d))
+			i++;
+	}
+	if (numwords == 0)
+		return (NULL);
+	s = malloc((numwords + 1) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	for (i = 0, j = 0; j < numwords; j++)
+	{
+		while (is_delim(str[i], d))
+			i++;
+		for (k = 0; str[i + k] && !is_delim(str[i + k], d); )
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
+		{
+			for (m = 0; m < j; m++)
+				free(s[m]);
+			free(s);
+			return (NULL);
+		}
+		strncpy(s[j], str + i, k), s[j][k] = '\0', i += k;
+	}
+	s[numwords] = NULL;
 	return (s);
 }
 

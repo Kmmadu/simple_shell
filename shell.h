@@ -79,7 +79,7 @@ void _print(const char *str);
 char **tokenize_cmd(const char *cmd, const char *delim, int *num_tokens);
 int _strlen(const char *str);
 int check_interactive(info_t *info);
-int is_delimiter(char c, char *delim);
+int is_delim(char c, char *delim);
 int is_alpha(int c);
 int custom_atoi(char *s);
 void display_prompt(void);
@@ -95,7 +95,8 @@ int find_builtin_command(info_t *info);
 void find_external_command(info_t *info);
 void _putchar(char c);
 void _puts(char *str);
-
+char **customStringSplit(char *str, char d);
+char **customStringSplitWithDelimiters(char *str, char *d);
 
 #endif
 

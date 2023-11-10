@@ -28,45 +28,45 @@ int is_delim(char c, char *delim)
  */
 char **customStringSplit(char *str, char d)
 {
-	int i, j, k, numwords = 0, m;
-	char **s;
+	int idx, wIdx, cCnt, numwords = 0, cIdx;
+	char **rArr;
 
 	if (str == NULL || str[0] == '\0')
 		return (NULL);
 
-	for (i = 0; str[i] != '\0'; i++)
+	for (idx = 0; str[idx] != '\0'; idx++)
 	{
-		if (str[i] != d && (str[i + 1] == d || str[i + 1] == '\0'))
+		if (str[idx] != d && (str[idx + 1] == d || str[idx + 1] == '\0'))
 			numwords++;
 	}
 
 	if (numwords == 0)
 		return (NULL);
-	s = malloc((numwords + 1) * sizeof(char *));
-	if (!s)
+	rArr = malloc((numwords + 1) * sizeof(char *));
+	if (!rArr)
 		return (NULL);
-	for (i = 0, j = 0; j < numwords; j++)
+	for (idx = 0, wIdx = 0; wIdx < numwords; wIdx++)
 	{
-		while (str[i] == d)
-			i++;
-		k = 0;
-		while (str[i + k] != d && str[i + k] != '\0')
-			k++;
-		s[j] = malloc((k + 1) * sizeof(char));
-		if (!s[j])
+		while (str[idx] == d)
+			idx++;
+		cCnt = 0;
+		while (str[idx + cCnt] != d && str[idx + cCnt] != '\0')
+			cCnt++;
+		rArr[wIdx] = malloc((cCnt + 1) * sizeof(char));
+		if (!rArr[wIdx])
 		{
-			for (m = 0; m < j; m++)
-				free(s[m]);
-			free(s);
+			for (cIdx = 0; cIdx < wIdx; cIdx++)
+				free(rArr[cIdx]);
+			free(rArr);
 			return (NULL);
 		}
 
-		for (m = 0; m < k; m++)
-			s[j][m] = str[i++];
-		s[j][k] = '\0';
+		for (cIdx = 0; cIdx < cCnt; cIdx++)
+			rArr[wIdx][cIdx] = str[idx++];
+		rArr[wIdx][cCnt] = '\0';
 	}
-	s[numwords] = NULL;
-	return (s);
+	rArr[numwords] = NULL;
+	return (rArr);
 }
 
 /**
@@ -81,45 +81,45 @@ char **customStringSplit(char *str, char d)
  */
 char **customStringSplitWithDelimiters(char *str, char *d)
 {
-	int numwords = 0, i, k, m, j;
-	char **s;
+	int numwords = 0, idx, cCnt, cIdx, wIdx;
+	char **rArr;
 
 	if (str == NULL || str[0] == '\0')
 		return (NULL);
 	if (!d)
 		d = " ";
 
-	for (i = 0; str[i] != '\0';)
+	for (idx = 0; str[idx] != '\0';)
 	{
-		while (is_delim(str[i], d))
-			i++;
-		if (str[i] != '\0')
+		while (is_delim(str[idx], d))
+			idx++;
+		if (str[idx] != '\0')
 			numwords++;
-		while (str[i] && !is_delim(str[i], d))
-			i++;
+		while (str[idx] && !is_delim(str[idx], d))
+			idx++;
 	}
 	if (numwords == 0)
 		return (NULL);
-	s = malloc((numwords + 1) * sizeof(char *));
-	if (!s)
+	rArr = malloc((numwords + 1) * sizeof(char *));
+	if (!rArr)
 		return (NULL);
-	for (i = 0, j = 0; j < numwords; j++)
+	for (idx = 0, wIdx = 0; wIdx < numwords; wIdx++)
 	{
-		while (is_delim(str[i], d))
-			i++;
-		for (k = 0; str[i + k] && !is_delim(str[i + k], d); )
-			k++;
-		s[j] = malloc((k + 1) * sizeof(char));
-		if (!s[j])
+		while (is_delim(str[idx], d))
+			idx++;
+		for (cCnt = 0; str[idx + cCnt] && !is_delim(str[idx + cCnt], d); )
+			cCnt++;
+		rArr[wIdx] = malloc((cCnt + 1) * sizeof(char));
+		if (!rArr[wIdx])
 		{
-			for (m = 0; m < j; m++)
-				free(s[m]);
-			free(s);
+			for (cIdx = 0; cIdx < wIdx; cIdx++)
+				free(rArr[cIdx]);
+			free(rArr);
 			return (NULL);
 		}
-		strncpy(s[j], str + i, k), s[j][k] = '\0', i += k;
+		strncpy(rArr[wIdx], str + idx, cCnt), rArr[wIdx][cCnt] = '\0', idx += cCnt;
 	}
-	s[numwords] = NULL;
-	return (s);
+	rArr[numwords] = NULL;
+	return (rArr);
 }
 

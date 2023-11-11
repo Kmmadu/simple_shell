@@ -71,7 +71,9 @@ typedef struct builtin
 } builtin_table;
 
 /* Function Declarations */
-
+char *does_path_exists(char *path);
+char *construct_cmd_path(char *dir, char *cmd);
+char *get_cmd_path(char *cmd);
 int show_help(info_t *info);
 int change_directory(info_t *info);
 int exit_shell(info_t *info);

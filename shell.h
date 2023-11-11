@@ -97,6 +97,10 @@ void _putchar(char c);
 void _puts(char *str);
 char **customStringSplit(char *str, char d);
 char **customStringSplitWithDelimiters(char *str, char *d);
+int _change_directory(info_t *info)
+int _display_help(info_t *info)
+int _exit_shell(info_t *info)
+
 
 #endif
 

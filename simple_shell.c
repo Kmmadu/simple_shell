@@ -15,28 +15,49 @@ void display_prompt(void)
  */
 void command_exec(char *cmd)
 {
-	char **tokens;
-	int token_count;
-
-	pid_t cmd_pid = fork();
+	char **tokens, *full_cmd;
+	extern char **environ;
+	int token_count, i;
+	pid_t cmd_pid;
 
 	token_count = 0;
-
-	if (cmd_pid == -1)
+	tokens = tokenize_cmd(cmd, " ", &token_count);
+	if (strcmp(tokens[0], "exit") == 0)
 	{
-		perror("fork");
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
-	else if (cmd_pid == 0)
+	else if(strcmp(tokens[0], "env") == 0)
 	{
-		tokens = tokenize_cmd(cmd, " ", &token_count);
-		execve(tokens[0], tokens, NULL);
-		perror("./shell");
-		exit(EXIT_FAILURE);
+		for (i = 0; environ[i] != NULL; i++)
+		{
+			_print(environ[i]);
+			_print("\n");
+		}
 	}
 	else
 	{
-		wait(NULL);
+		cmd_pid = fork();
+		if (cmd_pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		else if (cmd_pid == 0)
+		{
+			/*cmd process execution*/
+			full_cmd = get_cmd_path(tokens[0]);
+			if (full_cmd != NULL)
+			{
+				execve(full_cmd, tokens, NULL);
+				perror("./shell");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			/* parent process execution*/
+			wait(NULL);
+		}
 	}
 }
 
@@ -62,4 +83,3 @@ void read_cmd(char *cmd, size_t size)
 	}
 	cmd[strcspn(cmd, "\n")] = '\0';
 }
-

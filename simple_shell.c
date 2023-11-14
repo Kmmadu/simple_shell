@@ -1,5 +1,5 @@
 #include "shell.h"
-#include <stdio.h>
+void get_shell_env(void);
 
 /**
  * display_prompt - Display the regular prompt message.
@@ -12,28 +12,22 @@ void display_prompt(void)
 /**
  * command_exec - Execute a command read in the prompt.
  * @cmd: Input command from the prompt.
+ *
+ * Return: void nothing
  */
 void command_exec(char *cmd)
 {
-	char **tokens, *full_cmd;
-	extern char **environ;
-	int token_count, i;
+	char **tokens, *full_cmd, *cmd_0;
+	int token_count;
 	pid_t cmd_pid;
 
 	token_count = 0;
 	tokens = tokenize_cmd(cmd, " ", &token_count);
-	if (strcmp(tokens[0], "exit") == 0)
-	{
+	cmd_0 = tokens[0];
+	if (_strcmp(cmd_0, "exit") == 0)
 		exit(EXIT_SUCCESS);
-	}
-	else if(strcmp(tokens[0], "env") == 0)
-	{
-		for (i = 0; environ[i] != NULL; i++)
-		{
-			_print(environ[i]);
-			_print("\n");
-		}
-	}
+	else if (_strcmp(cmd_0, "env") == 0)
+		get_shell_env();
 	else
 	{
 		cmd_pid = fork();
@@ -43,8 +37,7 @@ void command_exec(char *cmd)
 			exit(EXIT_FAILURE);
 		}
 		else if (cmd_pid == 0)
-		{
-			/*cmd process execution*/
+		{/*cmd process execution*/
 			full_cmd = get_cmd_path(tokens[0]);
 			if (full_cmd != NULL)
 			{
@@ -54,10 +47,25 @@ void command_exec(char *cmd)
 			}
 		}
 		else
-		{
-			/* parent process execution*/
+		{/* parent process execution*/
 			wait(NULL);
 		}
+	}
+}
+
+/**
+ * get_shell_env - get the environment varaiables
+ *
+ * Return: void
+ */
+void get_shell_env(void)
+{
+	int i;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		_print(environ[i]);
+		_print("\n");
 	}
 }
 
@@ -72,12 +80,12 @@ void read_cmd(char *cmd, size_t size)
 	{
 		if (feof(stdin))
 		{
-			printf("\n");
+			_print("\n");
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
-			printf("Error while reading input.\n");
+			perror("Error while reading input.");
 			exit(EXIT_FAILURE);
 		}
 	}

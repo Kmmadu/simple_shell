@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * get_cmd_path - get the command's file path
  * @cmd: the input command
@@ -13,7 +14,7 @@ char *get_cmd_path(char *cmd)
 	paths = getenv("PATH");
 	if (paths)
 	{
-		p_cpy = strdup(paths);
+		p_cpy = _strdup(paths);
 		dir = strtok(p_cpy, ":");
 		while (dir != NULL)
 		{
@@ -66,10 +67,10 @@ char *construct_cmd_path(char *dir, char *cmd)
 		perror("Error Memory Allocation");
 		exit(EXIT_FAILURE);
 	}
-	strcpy(cmd_path, dir);
-	strcat(cmd_path, "/");
-	strcat(cmd_path, cmd);
-	strcat(cmd_path, "\0");
+	_strcpy(cmd_path, dir);
+	_strcat(cmd_path, "/");
+	_strcat(cmd_path, cmd);
+	_strcat(cmd_path, "\0");
 
 	return (cmd_path);
 }

@@ -12,10 +12,11 @@ void display_prompt(void)
 /**
  * command_exec - Execute a command read in the prompt.
  * @cmd: Input command from the prompt.
+ * @prog_name: program's name
  *
  * Return: void nothing
  */
-void command_exec(char *cmd)
+void command_exec(char *cmd, char *prog_name)
 {
 	char **tokens, *full_cmd, *cmd_0;
 	int token_count;
@@ -33,7 +34,7 @@ void command_exec(char *cmd)
 		cmd_pid = fork();
 		if (cmd_pid == -1)
 		{
-			perror("fork");
+			perror(prog_name);
 			exit(EXIT_FAILURE);
 		}
 		else if (cmd_pid == 0)
@@ -42,7 +43,12 @@ void command_exec(char *cmd)
 			if (full_cmd != NULL)
 			{
 				execve(full_cmd, tokens, NULL);
-				perror("./shell");
+				perror(prog_name);
+				exit(EXIT_FAILURE);
+			}
+			else
+			{
+				perror(prog_name);
 				exit(EXIT_FAILURE);
 			}
 		}

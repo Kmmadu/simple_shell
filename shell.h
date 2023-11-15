@@ -21,7 +21,7 @@ void _print(const char *str);
 char **tokenize_cmd(char *cmd, const char *delim, int *num_tokens);
 int _strlen(const char *str);
 void display_prompt(void);
-void command_exec(char *cmd);
+void command_exec(char *cmd, char *prog_name);
 void read_cmd(char *cmd, size_t size);
 int _strcmp(char *str1, char *str2);
 char *_strdup(char *str);

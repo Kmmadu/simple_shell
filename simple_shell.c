@@ -81,7 +81,11 @@ void get_shell_env(void)
  */
 void read_cmd(char *cmd, size_t size)
 {
-	if (fgets(cmd, size, stdin) == NULL)
+	
+	/*ssize_t f_cmd_size;*/
+
+	getline(&cmd, &size, stdin);
+	/*if (f_cmd_size > 0)
 	{
 		if (feof(stdin))
 		{
@@ -93,6 +97,6 @@ void read_cmd(char *cmd, size_t size)
 			perror("Error while reading input.");
 			exit(EXIT_FAILURE);
 		}
-	}
+	}*/
 	cmd[strcspn(cmd, "\n")] = '\0';
 }

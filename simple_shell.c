@@ -31,30 +31,29 @@ void command_exec(char *cmd, char *prog_name)
 		get_shell_env();
 	else
 	{
-		cmd_pid = fork();
-		if (cmd_pid == -1)
+		full_cmd = get_cmd_path(tokens[0]);
+		if (full_cmd == NULL)
 		{
 			perror(prog_name);
-			exit(EXIT_FAILURE);
 		}
-		else if (cmd_pid == 0)
-		{/*cmd process execution*/
-			full_cmd = get_cmd_path(tokens[0]);
-			if (full_cmd != NULL)
+		else
+		{
+			cmd_pid = fork();
+			if (cmd_pid == -1)
 			{
+				perror(prog_name);
+				exit(EXIT_FAILURE);
+			}
+			else if (cmd_pid == 0)
+			{/*cmd process execution*/
 				execve(full_cmd, tokens, NULL);
 				perror(prog_name);
 				exit(EXIT_FAILURE);
 			}
 			else
-			{
-				perror(prog_name);
-				exit(EXIT_FAILURE);
+			{/* parent process execution*/
+				wait(&cmd_pid);
 			}
-		}
-		else
-		{/* parent process execution*/
-			wait(NULL);
 		}
 	}
 }

@@ -53,6 +53,7 @@ char **tokenize_cmd(char *cmd, const char *delim, int *num_tokens)
 	}
 	tokens[i] = NULL;
 	*num_tokens = i;
+
 	return (tokens);
 }
 

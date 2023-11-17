@@ -19,16 +19,26 @@ void display_prompt(void)
 void command_exec(char *cmd, char *prog_name)
 {
 	char **tokens, *full_cmd, *cmd_0;
-	int token_count;
+	int token_count, j;
 	pid_t cmd_pid;
 
 	token_count = 0;
 	tokens = tokenize_cmd(cmd, " ", &token_count);
 	cmd_0 = tokens[0];
 	if (_strcmp(cmd_0, "exit") == 0)
+	{
+		for (j = 0; j < token_count; j++)
+			free(tokens[j]);
+		free(tokens);
 		exit(EXIT_SUCCESS);
+	}
 	else if (_strcmp(cmd_0, "env") == 0)
+	{
 		get_shell_env();
+		for (j = 0; j < token_count; j++)
+			free(tokens[j]);
+		free(tokens);
+	}
 	else
 	{
 		full_cmd = get_cmd_path(tokens[0]);
@@ -55,6 +65,10 @@ void command_exec(char *cmd, char *prog_name)
 				wait(&cmd_pid);
 			}
 		}
+		for (j = 0; j < token_count; j++)
+			free(tokens[j]);
+		free(full_cmd);
+		free(tokens);
 	}
 }
 
@@ -81,22 +95,6 @@ void get_shell_env(void)
  */
 void read_cmd(char *cmd, size_t size)
 {
-	
-	/*ssize_t f_cmd_size;*/
-
 	getline(&cmd, &size, stdin);
-	/*if (f_cmd_size > 0)
-	{
-		if (feof(stdin))
-		{
-			_print("\n");
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			perror("Error while reading input.");
-			exit(EXIT_FAILURE);
-		}
-	}*/
 	cmd[strcspn(cmd, "\n")] = '\0';
 }
